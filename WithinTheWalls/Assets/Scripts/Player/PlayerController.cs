@@ -33,6 +33,9 @@ public class PlayerController : PortalTraveller
     private float verticalVelocity;
     Vector3 velocity;
 
+    public float interactDistance = 3f;
+    public KeyCode interactKey = KeyCode.E;
+
     //private Alteruna.Avatar _avatar;
     void Awake()
     {
@@ -82,6 +85,21 @@ public class PlayerController : PortalTraveller
     {
         //if (!_avatar.IsMe)
         //    return;
+
+        if (Input.GetKeyDown(interactKey))
+        {
+            RaycastHit hit;
+            
+            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, interactDistance))
+            {
+                Door door = hit.collider.GetComponent<Door>();
+
+                if (door != null)
+                {
+                    door.ToggleDoor();
+                }
+            }
+        }
 
         HandleMovement();
         HandleLook();
