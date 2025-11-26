@@ -1,7 +1,9 @@
+using Alteruna;
 using UnityEngine;
 
-public class Door : MonoBehaviour
+public class Door : AttributesSync
 {
+    [SynchronizableField]
     public bool isOpen = false;
     public float openAngle = 90f;
     public float speed = 3f;
