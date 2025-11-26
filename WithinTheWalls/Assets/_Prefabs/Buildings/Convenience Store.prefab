@@ -229,6 +229,7 @@ GameObject:
   - component: {fileID: 374023905767716786}
   - component: {fileID: 9134045358012334823}
   - component: {fileID: 6770057224551603014}
+  - component: {fileID: -5174904041896518499}
   m_Layer: 0
   m_Name: Convenience Store
   m_TagString: Untagged
@@ -313,6 +314,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &-5174904041896518499
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3462925584913367967}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 331441723478848480, guid: f8ddf9f23e3a4c8409be5b5799a7d10c, type: 3}
 --- !u!1 &3468998733511808584
 GameObject:
   m_ObjectHideFlags: 0

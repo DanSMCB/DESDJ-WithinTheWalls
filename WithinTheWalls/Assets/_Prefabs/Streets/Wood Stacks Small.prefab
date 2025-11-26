@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5479817202931466528}
   - component: {fileID: 4549009059328897211}
   - component: {fileID: 7543944095445594648}
+  - component: {fileID: -1192960644732725459}
   m_Layer: 0
   m_Name: Wood Stacks Small
   m_TagString: Untagged
@@ -86,3 +87,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &-1192960644732725459
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6229598277585263254}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.09276722, y: 0.03384889, z: 0.038302697}
+  m_Center: {x: 0, y: 0, z: 0.00045689094}

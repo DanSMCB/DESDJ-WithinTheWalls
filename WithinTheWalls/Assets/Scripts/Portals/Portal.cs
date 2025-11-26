@@ -13,21 +13,30 @@ public class Portal : MonoBehaviour {
     public float nearClipLimit = 0.2f;
 
     // Private variables
-    RenderTexture viewTexture;
-    Camera portalCam;
-    Camera playerCam;
-    Material firstRecursionMat;
-    List<PortalTraveller> trackedTravellers;
-    MeshFilter screenMeshFilter;
+    private RenderTexture viewTexture;
+    private Camera portalCam;
+    private Camera playerCam;
+    private Material firstRecursionMat;
+    private List<PortalTraveller> trackedTravellers;
+    private MeshFilter screenMeshFilter;
 
     void Start () {
-        playerCam = Camera.main;
-        portalCam = GetComponentInChildren<Camera> ();
+        portalCam = GetComponentInChildren<Camera>();
         portalCam.enabled = false;
         trackedTravellers = new List<PortalTraveller> ();
         screenMeshFilter = screen.GetComponent<MeshFilter> ();
         screen.material.SetInt ("_DisplayMask", 1);
     }
+
+    void Update()
+    {
+        if (PortalManager.Instance != null && PortalManager.Instance.LocalPlayerCamera != null)
+        {
+            playerCam = PortalManager.Instance.LocalPlayerCamera;
+            Debug.Log("Portal: got LocalPlayerCamera from PortalManager: " + playerCam.name);
+        }
+    }
+
 
     void LateUpdate () {
         HandleTravellers ();
@@ -72,6 +81,18 @@ public class Portal : MonoBehaviour {
     // Manually render the camera attached to this portal
     // Called after PrePortalRender, and before PostPortalRender
     public void Render () {
+
+        if (linkedPortal == null)
+        {
+            Debug.LogWarning($"Portal '{name}' has no linkedPortal assigned.");
+            return;
+        }
+
+        if (playerCam == null)
+        {
+            // ainda sem camera — não renderizar
+            return;
+        }
 
         // Skip rendering the view from this portal if player is not looking at the linked portal
         if (!CameraUtility.VisibleFromCamera (linkedPortal.screen, playerCam)) {
@@ -130,7 +151,7 @@ public class Portal : MonoBehaviour {
         // Would be great if this could be fixed more elegantly, but this is the best I can figure out for now
         const float hideDst = -1000;
         const float showDst = 1000;
-        float screenThickness = linkedPortal.ProtectScreenFromClipping (portalCam.transform.position);
+        float screenThickness = linkedPortal.ProtectScreenFromClipping (portalCam);
 
         foreach (var traveller in trackedTravellers) {
             if (SameSideOfPortal (traveller.transform.position, portalCamPos)) {
@@ -176,11 +197,11 @@ public class Portal : MonoBehaviour {
     }
 
     // Called once all portals have been rendered, but before the player camera renders
-    public void PostPortalRender () {
+    public void PostPortalRender (Camera userCam) {
         foreach (var traveller in trackedTravellers) {
             UpdateSliceParams (traveller);
         }
-        ProtectScreenFromClipping (playerCam.transform.position);
+        ProtectScreenFromClipping (userCam);
     }
     void CreateViewTexture () {
         if (viewTexture == null || viewTexture.width != Screen.width || viewTexture.height != Screen.height) {
@@ -196,10 +217,12 @@ public class Portal : MonoBehaviour {
     }
 
     // Sets the thickness of the portal screen so as not to clip with camera near plane when player goes through
-    float ProtectScreenFromClipping (Vector3 viewPoint) {
-        float halfHeight = playerCam.nearClipPlane * Mathf.Tan (playerCam.fieldOfView * 0.5f * Mathf.Deg2Rad);
-        float halfWidth = halfHeight * playerCam.aspect;
-        float dstToNearClipPlaneCorner = new Vector3 (halfWidth, halfHeight, playerCam.nearClipPlane).magnitude;
+    float ProtectScreenFromClipping (Camera userCam) {
+        Vector3 viewPoint = userCam.transform.position;
+
+        float halfHeight = userCam.nearClipPlane * Mathf.Tan (userCam.fieldOfView * 0.5f * Mathf.Deg2Rad);
+        float halfWidth = halfHeight * userCam.aspect;
+        float dstToNearClipPlaneCorner = new Vector3 (halfWidth, halfHeight, userCam.nearClipPlane).magnitude;
         float screenThickness = dstToNearClipPlaneCorner;
 
         Transform screenT = screen.transform;
