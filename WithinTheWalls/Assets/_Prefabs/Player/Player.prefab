@@ -121,6 +121,7 @@ GameObject:
   - component: {fileID: 359553837311477434}
   - component: {fileID: 701747144682682876}
   - component: {fileID: 1136163510524924005}
+  - component: {fileID: 263921793878613859}
   - component: {fileID: 5126728185814348548}
   - component: {fileID: 6330137071876468684}
   m_Layer: 0
@@ -196,6 +197,21 @@ MonoBehaviour:
   interactDistance: 3
   interactKey: 101
   canLook: 1
+--- !u!114 &263921793878613859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2737713651744553735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 942da1c8e14d9da41a0dc9335b352365, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onSFX: {fileID: 8300000, guid: 67599690d5a57424492cac50fd4d675a, type: 3}
+  offSFX: {fileID: 8300000, guid: 81ec0f1cbe84edb46ab05e3fdefc8220, type: 3}
+  IsEnabled: 1
 --- !u!114 &5126728185814348548
 MonoBehaviour:
   m_ObjectHideFlags: 0
