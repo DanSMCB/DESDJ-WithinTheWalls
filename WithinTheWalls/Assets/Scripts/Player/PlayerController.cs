@@ -39,7 +39,7 @@ public class PlayerController : PortalTraveller
     [HideInInspector]
     public bool canLook = true;
 
-    //private Alteruna.Avatar _avatar;
+    private Alteruna.Avatar _avatar;
     void Awake()
     {
         input = new PlayerInputActions();
@@ -62,12 +62,21 @@ public class PlayerController : PortalTraveller
 
     void Start()
     {
-        //_avatar = GetComponent<Alteruna.Avatar>();
-        //if (!_avatar.IsMe)
-        //    return;
-
+        _avatar = GetComponent<Alteruna.Avatar>();
+        if (!_avatar.IsMe)
+            return;
         controller = GetComponent<CharacterController>();
+
+        // Primeiro apanhar a camera!
         cam = GetComponentInChildren<Camera>();
+        if (cam == null)
+        {
+            Debug.LogError("PlayerController: NENHUMA camera encontrada no jogador!");
+            return;
+        }
+
+        if (PortalManager.Instance != null)
+            PortalManager.Instance.RegisterLocalCamera(cam);
 
         if (lockCursor)
         {
@@ -86,16 +95,19 @@ public class PlayerController : PortalTraveller
 
     void Update()
     {
+        if (!_avatar.IsMe)
+            return;
 
         if (!canLook) return;
-        //if (!_avatar.IsMe)
-        //    return;
 
         if (Input.GetKeyDown(interactKey))
         {
             RaycastHit hit;
             float radius = 0.5f;
-            if (Physics.SphereCast(Camera.main.transform.position, radius, Camera.main.transform.forward, out hit, interactDistance))
+
+            int layerMask = ~LayerMask.GetMask("Ignore Raycast");
+
+            if (Physics.SphereCast(cam.transform.position, radius, cam.transform.forward, out hit, interactDistance, layerMask))
             {
                 //Abrir porta
                 Door door = hit.collider.GetComponent<Door>();
@@ -120,16 +132,17 @@ public class PlayerController : PortalTraveller
         }
 
         HandleMovement();
+        ApplyRotation();
         HandleLook();
     }
 
-    void LateUpdate()
-    {
-        //if (!_avatar.IsMe)
-        //    return;
+    //void LateUpdate()
+    //{
+    //    //if (!_avatar.IsMe)
+    //    //    return;
 
-        ApplyRotation();
-    }
+    //    ApplyRotation();
+    //}
 
     private void HandleMovement()
     {
