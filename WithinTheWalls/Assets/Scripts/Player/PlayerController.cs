@@ -33,8 +33,11 @@ public class PlayerController : PortalTraveller
     private float verticalVelocity;
     Vector3 velocity;
 
-    public float interactDistance = 3f;
+    public float interactDistance = 4f;
     public KeyCode interactKey = KeyCode.E;
+
+    [HideInInspector]
+    public bool canLook = true;
 
     //private Alteruna.Avatar _avatar;
     void Awake()
@@ -83,20 +86,35 @@ public class PlayerController : PortalTraveller
 
     void Update()
     {
+
+        if (!canLook) return;
         //if (!_avatar.IsMe)
         //    return;
 
         if (Input.GetKeyDown(interactKey))
         {
             RaycastHit hit;
-            
-            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, interactDistance))
+            float radius = 0.5f;
+            if (Physics.SphereCast(Camera.main.transform.position, radius, Camera.main.transform.forward, out hit, interactDistance))
             {
+                //Abrir porta
                 Door door = hit.collider.GetComponent<Door>();
 
                 if (door != null)
                 {
                     door.ToggleDoor();
+                }
+
+                // Apanhar items
+                Item item = hit.collider.GetComponent<Item>();
+                if (item != null)
+                {
+                    Debug.Log("Picked up " + item.itemName);
+                    InventoryManager inv = GameObject.Find("InventoryCanvas").GetComponent<InventoryManager>();
+                    inv.AddItem(item.itemName, item.quantity, item.sprite);
+
+                    Destroy(item.gameObject);
+                    return;
                 }
             }
         }
