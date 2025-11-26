@@ -4,7 +4,7 @@ public class InventoryManager : MonoBehaviour
 {
 
     public GameObject InventoryMenu;
-    private bool menuActivated;
+    private bool menuActivated=false;
     public PlayerController player;
     public ItemSlot[] itemSlot;
 
@@ -17,24 +17,29 @@ public class InventoryManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Inventory") && menuActivated) { 
-            InventoryMenu.SetActive(false);
-            menuActivated = false;
 
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-
-            player.canLook = true;
-        }
-        else if (Input.GetButtonDown("Inventory") && !menuActivated)
+        if (Input.GetButtonDown("Inventory"))
         {
-            InventoryMenu.SetActive(true);
-            menuActivated = true;
+            if(menuActivated)
+            {
+                InventoryMenu.SetActive(false);
+                menuActivated = false;
 
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
 
-            player.canLook = false;
+                player.canLook = true;
+            }
+            else
+            {
+                InventoryMenu.SetActive(true);
+                menuActivated = true;
+
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+
+                player.canLook = false;
+            }
         }
     }
 
