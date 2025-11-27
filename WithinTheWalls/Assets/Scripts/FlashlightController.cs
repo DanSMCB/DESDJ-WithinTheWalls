@@ -16,65 +16,45 @@ public class FlashlightController : MonoBehaviour
 
     public bool IsEnabled = true;
 
-    private PlayerController player;    
-
     private void Awake()
     {
-        player = FindObjectOfType<PlayerController>();
         cam = GetComponentInChildren<Camera>();
         lightSource = transform.GetChild(3).gameObject;
         audioSource = GetComponentInChildren<AudioSource>();
-    }
 
-    private void OnEnable()
-    {
-        player.input.Player.Flashlight.performed += OnFlashlight;
-    }
-
-    private void OnDisable()
-    {
-        player.input.Player.Flashlight.performed -= OnFlashlight;
-    }
-
-    private void Start()
-    {
-        lightSource.gameObject.SetActive(false);
         offset = transform.position - cam.transform.position;
-    }
-    
-    private void OnFlashlight(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
-    {
-        if (IsOn == false)
-        {
-            lightSource.gameObject.SetActive(true);
-            IsOn = true;
-            audioSource.PlayOneShot(onSFX);
-        }
-        else
-        {
-            lightSource.gameObject.SetActive(false);
-            IsOn = false;
-            audioSource.PlayOneShot(offSFX);
-        }
+
+        lightSource.SetActive(false);
     }
 
-    private void Update()
+    public void ToggleFlashlight()
     {
         transform.position = cam.transform.position + offset;
         transform.rotation = Quaternion.Slerp(transform.rotation, cam.transform.rotation, speed * Time.deltaTime);
 
-        if (!IsEnabled)
+        if (IsEnabled)
         {
-            lightSource.gameObject.SetActive(false);
-            IsOn = false;
-            return;
+            if (IsOn)
+            {
+                FlashlightOff();
+            }else
+            {
+                FlashlightOn();
+            }
         }
     }
 
-    public void PlayFlashlightOffSFX()
+    public void FlashlightOff()
     {
-        audioSource.PlayOneShot(onSFX);
-        audioSource.PlayDelayed(2f);
+        lightSource.SetActive(false);
+        IsOn = false;
         audioSource.PlayOneShot(offSFX);
+    }
+
+    public void FlashlightOn()
+    {
+        lightSource.SetActive(true);
+        IsOn = true;
+        audioSource.PlayOneShot(onSFX);
     }
 }
