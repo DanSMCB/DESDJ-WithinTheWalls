@@ -33,7 +33,6 @@ public class Portal : MonoBehaviour {
         if (PortalManager.Instance != null && PortalManager.Instance.LocalPlayerCamera != null)
         {
             playerCam = PortalManager.Instance.LocalPlayerCamera;
-            Debug.Log("Portal: got LocalPlayerCamera from PortalManager: " + playerCam.name);
         }
     }
 

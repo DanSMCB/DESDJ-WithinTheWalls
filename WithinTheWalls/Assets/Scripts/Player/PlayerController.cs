@@ -18,7 +18,6 @@ public class PlayerController : PortalTraveller
 
     CharacterController controller;
     Camera cam;
-    private PlayerInputActions input;
 
     private Vector2 moveInput;
     private Vector2 lookInput;
@@ -34,13 +33,15 @@ public class PlayerController : PortalTraveller
     Vector3 velocity;
 
     public float interactDistance = 4f;
-    public KeyCode interactKey = KeyCode.E;
 
     [HideInInspector]
     public bool canLook = true;
 
     private Alteruna.Avatar _avatar;
-    void Awake()
+
+    public PlayerInputActions input { get; private set; }
+
+    private void Awake()
     {
         input = new PlayerInputActions();
     }
@@ -53,11 +54,46 @@ public class PlayerController : PortalTraveller
 
         input.Player.Look.performed += ctx => lookInput = ctx.ReadValue<Vector2>();
         input.Player.Look.canceled += ctx => lookInput = Vector2.zero;
+
+        input.Player.Interact.performed += OnInteract;
     }
 
     void OnDisable()
     {
+        input.Player.Interact.performed -= OnInteract;
+
         input.Player.Disable();
+    }
+
+    private void OnInteract(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
+    {
+        RaycastHit hit;
+        float radius = 0.5f;
+
+        int layerMask = ~LayerMask.GetMask("Ignore Raycast");
+
+        if (Physics.SphereCast(cam.transform.position, radius, cam.transform.forward, out hit, interactDistance, layerMask))
+        {
+            //Abrir porta
+            Door door = hit.collider.GetComponent<Door>();
+
+            if (door != null)
+            {
+                door.ToggleDoor();
+            }
+
+            // Apanhar items
+            Item item = hit.collider.GetComponent<Item>();
+            if (item != null)
+            {
+                Debug.Log("Picked up " + item.itemName);
+                InventoryManager inv = GameObject.Find("InventoryCanvas").GetComponent<InventoryManager>();
+                inv.AddItem(item.itemName, item.quantity, item.sprite);
+
+                Destroy(item.gameObject);
+                return;
+            }
+        }
     }
 
     void Start()
@@ -65,6 +101,7 @@ public class PlayerController : PortalTraveller
         _avatar = GetComponent<Alteruna.Avatar>();
         if (!_avatar.IsMe)
             return;
+
         controller = GetComponent<CharacterController>();
 
         // Primeiro apanhar a camera!
@@ -98,51 +135,14 @@ public class PlayerController : PortalTraveller
         if (!_avatar.IsMe)
             return;
 
+        Debug.Log(canLook);
+
         if (!canLook) return;
-
-        if (Input.GetKeyDown(interactKey))
-        {
-            RaycastHit hit;
-            float radius = 0.5f;
-
-            int layerMask = ~LayerMask.GetMask("Ignore Raycast");
-
-            if (Physics.SphereCast(cam.transform.position, radius, cam.transform.forward, out hit, interactDistance, layerMask))
-            {
-                //Abrir porta
-                Door door = hit.collider.GetComponent<Door>();
-
-                if (door != null)
-                {
-                    door.ToggleDoor();
-                }
-
-                // Apanhar items
-                Item item = hit.collider.GetComponent<Item>();
-                if (item != null)
-                {
-                    Debug.Log("Picked up " + item.itemName);
-                    InventoryManager inv = GameObject.Find("InventoryCanvas").GetComponent<InventoryManager>();
-                    inv.AddItem(item.itemName, item.quantity, item.sprite);
-
-                    Destroy(item.gameObject);
-                    return;
-                }
-            }
-        }
 
         HandleMovement();
         ApplyRotation();
         HandleLook();
     }
-
-    //void LateUpdate()
-    //{
-    //    //if (!_avatar.IsMe)
-    //    //    return;
-
-    //    ApplyRotation();
-    //}
 
     private void HandleMovement()
     {

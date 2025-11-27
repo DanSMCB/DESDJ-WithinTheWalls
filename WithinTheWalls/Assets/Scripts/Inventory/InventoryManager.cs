@@ -1,52 +1,67 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InventoryManager : MonoBehaviour
 {
 
     public GameObject InventoryMenu;
-    private bool menuActivated=false;
-    public PlayerController player;
     public ItemSlot[] itemSlot;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private bool menuActivated;
+
+    private PlayerController player;
+
     void Start()
     {
-        
+        // Começa a procurar o jogador até existir
+        StartCoroutine(WaitForPlayer());
     }
 
-    // Update is called once per frame
-    void Update()
+    private System.Collections.IEnumerator WaitForPlayer()
     {
-
-        if (Input.GetButtonDown("Inventory"))
+        while (player == null)
         {
-            if(menuActivated)
-            {
-                InventoryMenu.SetActive(false);
-                menuActivated = false;
+            player = FindObjectOfType<PlayerController>();
+            yield return null; // Espera 1 frame
+        }
 
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
+        // Quando encontrar, liga o evento
+        player.input.Player.Inventory.performed += OnInventory;
 
-                player.canLook = true;
-            }
-            else
-            {
-                InventoryMenu.SetActive(true);
-                menuActivated = true;
+        Debug.Log("InventoryManager: Player encontrado e input ligado!");
+    }
 
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
+    private void OnDestroy()
+    {
+        if (player != null)
+            player.input.Player.Inventory.performed -= OnInventory;
+    }
 
-                player.canLook = false;
-            }
+    private void OnInventory(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
+    {
+        menuActivated = !menuActivated;
+        InventoryMenu.SetActive(menuActivated);
+
+        if (menuActivated)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            player.canLook = false;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            player.canLook = true;
         }
     }
 
-    public void AddItem(string itemName, int quantity, Sprite itemSprite) {
+    public void AddItem(string itemName, int quantity, Sprite itemSprite)
+    {
         for (int i = 0; i < itemSlot.Length; i++)
         {
-            if (itemSlot[i].isFull == false) {
+            if (itemSlot[i].isFull == false)
+            {
                 itemSlot[i].AddItem(itemName, quantity, itemSprite);
                 return;
             }

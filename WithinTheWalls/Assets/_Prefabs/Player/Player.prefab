@@ -195,7 +195,6 @@ MonoBehaviour:
   rotationSmoothTime: 0.1
   lockCursor: 1
   interactDistance: 3
-  interactKey: 101
   canLook: 1
 --- !u!114 &263921793878613859
 MonoBehaviour:
