@@ -34,21 +34,70 @@ public class PlayerController : PortalTraveller
 
     public float interactDistance = 4f;
 
-    //[HideInInspector]
+    [HideInInspector]
     public bool canLook = true;
-
-    private PlayerInputActions playerInputActions;
 
     private Alteruna.Avatar _avatar;
 
-    void Awake()
+    public PlayerInputActions input { get; private set; }
+
+    private void Awake()
     {
-        playerInputActions = new PlayerInputActions();
+        input = new PlayerInputActions();
+    }
+
+    void OnEnable()
+    {
+        input.Player.Enable();
+        input.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
+        input.Player.Move.canceled += ctx => moveInput = Vector2.zero;
+
+        input.Player.Look.performed += ctx => lookInput = ctx.ReadValue<Vector2>();
+        input.Player.Look.canceled += ctx => lookInput = Vector2.zero;
+
+        input.Player.Interact.performed += OnInteract;
+    }
+
+    void OnDisable()
+    {
+        input.Player.Interact.performed -= OnInteract;
+
+        input.Player.Disable();
+    }
+
+    private void OnInteract(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
+    {
+        RaycastHit hit;
+        float radius = 0.5f;
+
+        int layerMask = ~LayerMask.GetMask("Ignore Raycast");
+
+        if (Physics.SphereCast(cam.transform.position, radius, cam.transform.forward, out hit, interactDistance, layerMask))
+        {
+            //Abrir porta
+            Door door = hit.collider.GetComponent<Door>();
+
+            if (door != null)
+            {
+                door.ToggleDoor();
+            }
+
+            // Apanhar items
+            Item item = hit.collider.GetComponent<Item>();
+            if (item != null)
+            {
+                Debug.Log("Picked up " + item.itemName);
+                InventoryManager inv = GameObject.Find("InventoryCanvas").GetComponent<InventoryManager>();
+                inv.AddItem(item.itemName, item.quantity, item.sprite);
+
+                Destroy(item.gameObject);
+                return;
+            }
+        }
     }
 
     void Start()
     {
-        playerInputActions = new PlayerInputActions();
         _avatar = GetComponent<Alteruna.Avatar>();
         if (!_avatar.IsMe)
             return;
@@ -81,70 +130,14 @@ public class PlayerController : PortalTraveller
         smoothYaw = yaw;
     }
 
-    public void OnMove(InputValue value)
-    {
-        moveInput = value.Get<Vector2>();
-    }
-
-    public void OnLook(InputValue value)
-    {
-        lookInput = value.Get<Vector2>();
-    }
-
-    private void OnInteract()
-    {
-        RaycastHit hit;
-        float radius = 0.5f;
-
-        int layerMask = ~LayerMask.GetMask("Ignore Raycast");
-
-        if (Physics.SphereCast(cam.transform.position, radius, cam.transform.forward, out hit, interactDistance, layerMask))
-        {
-            //Abrir porta
-            Door door = hit.collider.GetComponent<Door>();
-
-            if (door != null)
-            {
-                door.ToggleDoor();
-            }
-
-            // Apanhar items
-            Item item = hit.collider.GetComponent<Item>();
-            if (item != null)
-            {
-                Debug.Log("Picked up " + item.itemName);
-                InventoryManager inv = GameObject.Find("InventoryCanvas").GetComponent<InventoryManager>();
-                inv.AddItem(item.itemName, item.quantity, item.sprite);
-
-                Destroy(item.gameObject);
-                return;
-            }
-        }
-    }
-
-    private void OnFlashlight()
-    {
-        FlashlightController flashlight = GetComponent<FlashlightController>();
-        if (flashlight != null)
-        {
-            flashlight.ToggleFlashlight();
-        }
-    }
-
-    private void OnInventory()
-    {
-        canLook = !canLook;
-        InventoryManager inv = GameObject.Find("InventoryCanvas").GetComponent<InventoryManager>();
-        inv.ToggleInventory();
-    }
-
     void Update()
     {
         if (!_avatar.IsMe)
             return;
 
-        if (!canLook) 
-            return;
+        Debug.Log(canLook);
+
+        if (!canLook) return;
 
         HandleMovement();
         ApplyRotation();
