@@ -79,8 +79,8 @@ public class Portal : MonoBehaviour {
 
     // Manually render the camera attached to this portal
     // Called after PrePortalRender, and before PostPortalRender
-    public void Render () {
-
+    public void Render () 
+    {
         if (linkedPortal == null)
         {
             Debug.LogWarning($"Portal '{name}' has no linkedPortal assigned.");

@@ -1,59 +1,38 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class InventoryManager : MonoBehaviour
 {
 
     public GameObject InventoryMenu;
+    private bool menuActivated = false;
     public ItemSlot[] itemSlot;
 
-    private bool menuActivated;
-
-    private PlayerController player;
-
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        // Começa a procurar o jogador até existir
-        StartCoroutine(WaitForPlayer());
+
     }
 
-    private System.Collections.IEnumerator WaitForPlayer()
+    // Update is called once per frame
+    public void ToggleInventory()
     {
-        while (player == null)
-        {
-            player = FindObjectOfType<PlayerController>();
-            yield return null; // Espera 1 frame
-        }
-
-        // Quando encontrar, liga o evento
-        player.input.Player.Inventory.performed += OnInventory;
-
-        Debug.Log("InventoryManager: Player encontrado e input ligado!");
-    }
-
-    private void OnDestroy()
-    {
-        if (player != null)
-            player.input.Player.Inventory.performed -= OnInventory;
-    }
-
-    private void OnInventory(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
-    {
-        menuActivated = !menuActivated;
-        InventoryMenu.SetActive(menuActivated);
-
         if (menuActivated)
         {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-            player.canLook = false;
+            InventoryMenu.SetActive(false);
+            menuActivated = false;
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
         else
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-            player.canLook = true;
+            InventoryMenu.SetActive(true);
+            menuActivated = true;
+
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
+
     }
 
     public void AddItem(string itemName, int quantity, Sprite itemSprite)
