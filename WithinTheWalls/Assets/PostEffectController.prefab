@@ -74,9 +74,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   volumeProfile: {fileID: 11400000, guid: 7bbe35cdf5d69e14abbb03eccedaa5bd, type: 2}
   isEnabled: 1
-  widthPixelation: 512
-  heightPixelation: 256
-  colorPrecision: 16
+  widthPixelation: 256
+  heightPixelation: 128
+  colorPrecision: 8
 --- !u!114 &3979143882875882705
 MonoBehaviour:
   m_ObjectHideFlags: 0

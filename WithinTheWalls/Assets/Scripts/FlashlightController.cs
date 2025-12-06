@@ -18,19 +18,22 @@ public class FlashlightController : MonoBehaviour
     private void Awake()
     {
         cam = GetComponentInChildren<Camera>();
-        lightSource = transform.GetChild(3).gameObject;
+        lightSource = transform.GetComponentInChildren<Light>().gameObject;
         audioSource = GetComponentInChildren<AudioSource>();
-
-        offset = transform.position - cam.transform.position;
+            
+        offset = lightSource.transform.position - cam.transform.position;
 
         lightSource.SetActive(false);
     }
 
+    void LateUpdate()
+    {
+        lightSource.transform.position = cam.transform.position + offset;
+        lightSource.transform.rotation = Quaternion.Slerp(lightSource.transform.rotation, cam.transform.rotation, speed * Time.deltaTime);
+    }
+
     public void ToggleFlashlight()
     {
-        transform.position = cam.transform.position + offset;
-        transform.rotation = Quaternion.Slerp(transform.rotation, cam.transform.rotation, speed * Time.deltaTime);
-
         if (IsEnabled)
         {
             if (IsOn)
