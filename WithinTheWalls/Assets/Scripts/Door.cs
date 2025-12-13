@@ -11,6 +11,8 @@ public class Door : AttributesSync
     private Quaternion closedRotation;
     private Quaternion openRotation;
 
+    public Door linkedDoor;
+
     void Start()
     {
         closedRotation = transform.rotation;
@@ -20,6 +22,7 @@ public class Door : AttributesSync
     public void ToggleDoor()
     {
         isOpen = !isOpen;
+        if(linkedDoor != null) linkedDoor.ToggleDoor();
     }
 
     void Update()

@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5853624981177429370}
+  - component: {fileID: -6642336560759020602}
   m_Layer: 0
   m_Name: Door_1A
   m_TagString: Untagged
@@ -38,6 +39,26 @@ Transform:
   - {fileID: 202231548456049310}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-6642336560759020602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6342062413248217533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbb3ffd6ceeb04041b1aa793ef4eda50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Multiplayer: {fileID: 0}
+  _uidString: ec717cb8-9580-4e02-bf46-19f2588c17b6
+  Reliability: 1
+  LocalMethodBehavior: 1
+  isOpen: 0
+  openAngle: 90
+  speed: 3
+  linkedDoor: {fileID: 0}
 --- !u!1001 &1226282572320948916
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -807,6 +828,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbb3ffd6ceeb04041b1aa793ef4eda50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Multiplayer: {fileID: 0}
+  _uidString: 
+  Reliability: 1
+  LocalMethodBehavior: 1
+  isOpen: 0
+  openAngle: 90
+  speed: 3
+  linkedDoor: {fileID: 0}
 --- !u!1001 &8274924540490086492
 PrefabInstance:
   m_ObjectHideFlags: 0
