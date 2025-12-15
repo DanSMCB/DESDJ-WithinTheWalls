@@ -3,31 +3,40 @@ using System.Collections;
 
 public class LoopIterationManager : MonoBehaviour
 {
-    public GameObject entryPortal;
-    public GameObject exitDoor;
-    public GameObject exitWall;
+    public GameObject portalI;
+    public GameObject portalJ;
+    public GameObject portalK;
+    public GameObject portalL;
+    public GameObject portalM;
+    public GameObject portalN;
+    public GameObject portalO;
+    public GameObject portalP;
+    public GameObject wallClock;
+    public GameObject doorClock;
     public GameObject clock;
-    private bool loopActivated = false;
 
     void Start()
     {
-        entryPortal.SetActive(false);
+        portalI.SetActive(false);
     }
 
     public void ActivateLoop()
     {
-        if (loopActivated) return;
-
-        loopActivated = true;
-        entryPortal.SetActive(true);
+        portalI.SetActive(true);
     }
 
     public void DeactivateLoop()
     {
-        loopActivated = false;
-        entryPortal.SetActive(false);
-        exitDoor.SetActive(false);
-        exitWall.SetActive(false);
+        portalI.SetActive(false);
+        portalJ.SetActive(false);
+        portalK.SetActive(false);
+        portalL.SetActive(false);
+        portalM.SetActive(false);
+        portalN.SetActive(false);
+        portalO.SetActive(false);
+        portalP.SetActive(false);
+        wallClock.SetActive(false);
+        doorClock.SetActive(false);
         clock.SetActive(false);
     }
 }

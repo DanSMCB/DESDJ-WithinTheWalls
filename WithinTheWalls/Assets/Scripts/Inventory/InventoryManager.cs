@@ -46,4 +46,33 @@ public class InventoryManager : MonoBehaviour
             }
         }
     }
+
+    public void RemoveItem(string itemName)
+    {
+        foreach (ItemSlot slot in itemSlot)
+        {
+            if (slot.isFull && slot.itemName == itemName)
+            {
+                slot.isFull = false;
+                slot.itemName = "";
+                slot.quantity = 0;
+                slot.itemSprite = null;
+                slot.itemImage.enabled = false;
+                
+                slot.quantityText.text = "";
+                slot.quantityText.enabled = false;
+                return;
+            }
+        }
+    }
+
+    public bool HasItem(string itemName)
+    {
+        foreach (ItemSlot slot in itemSlot)
+        {
+            if (slot.isFull && slot.itemName == itemName)
+                return true;
+        }
+        return false;
+    }
 }

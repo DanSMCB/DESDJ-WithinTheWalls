@@ -11,7 +11,7 @@ public class Door : AttributesSync
     private Quaternion closedRotation;
     private Quaternion openRotation;
 
-    public Door linkedDoor;
+    public bool isLocked = false;
 
     void Start()
     {
@@ -19,10 +19,20 @@ public class Door : AttributesSync
         openRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, openAngle, 0));
     }
 
+    public void Interact()
+    {
+        if (isLocked)
+        {
+            Debug.Log("A porta está trancada.");
+            return;
+        }
+
+        ToggleDoor();
+    }
+
     public void ToggleDoor()
     {
         isOpen = !isOpen;
-        if(linkedDoor != null) linkedDoor.ToggleDoor();
     }
 
     void Update()
@@ -35,5 +45,11 @@ public class Door : AttributesSync
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, closedRotation, Time.deltaTime * speed);
         }
+    }
+
+    public void Unlock()
+    {
+        Debug.Log("Porta destrancada.");
+        isLocked = false;
     }
 }

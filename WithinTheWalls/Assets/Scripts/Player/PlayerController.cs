@@ -105,7 +105,7 @@ public class PlayerController : PortalTraveller
 
             if (door != null)
             {
-                door.ToggleDoor();
+                door.Interact();
             }
 
             // Apanhar items
@@ -117,6 +117,14 @@ public class PlayerController : PortalTraveller
                 inv.AddItem(item.itemName, item.quantity, item.sprite);
 
                 Destroy(item.gameObject);
+                return;
+            }
+
+            // Interagir com puzzle do relogio
+            ClockPuzzle clock = hit.collider.GetComponent<ClockPuzzle>();
+            if (clock != null)
+            {
+                clock.Interact();
                 return;
             }
         }

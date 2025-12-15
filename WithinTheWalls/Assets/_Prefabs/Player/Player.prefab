@@ -125,6 +125,7 @@ GameObject:
   - component: {fileID: 6330137071876468684}
   - component: {fileID: 9153910372173480574}
   - component: {fileID: 1720778319993426846}
+  - component: {fileID: 672942072076010107}
   m_Layer: 0
   m_Name: Player
   m_TagString: Avatar
@@ -298,6 +299,14 @@ MonoBehaviour:
   onSFX: {fileID: 8300000, guid: 67599690d5a57424492cac50fd4d675a, type: 3}
   offSFX: {fileID: 8300000, guid: 81ec0f1cbe84edb46ab05e3fdefc8220, type: 3}
   IsEnabled: 1
+--- !u!81 &672942072076010107
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2737713651744553735}
+  m_Enabled: 1
 --- !u!1 &7091131377647696196
 GameObject:
   m_ObjectHideFlags: 0
