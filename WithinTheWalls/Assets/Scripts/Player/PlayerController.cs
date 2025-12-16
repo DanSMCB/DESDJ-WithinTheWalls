@@ -16,6 +16,9 @@ public class PlayerController : PortalTraveller
     [Header("Cursor")]
     public bool lockCursor = true;
 
+    [Header("Animation")]
+    public Animator animator;
+
     CharacterController controller;
     Camera cam;
 
@@ -163,6 +166,8 @@ public class PlayerController : PortalTraveller
     {
         Vector3 inputDir = new Vector3(moveInput.x, 0, moveInput.y).normalized;
         Vector3 horizontalVelocity = transform.TransformDirection(inputDir) * walkSpeed;
+
+        animator.SetFloat("Speed", horizontalVelocity.magnitude);
 
         // Handle gravity
         if (controller.isGrounded)
