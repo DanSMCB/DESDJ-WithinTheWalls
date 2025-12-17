@@ -6,6 +6,9 @@ public class ClockPuzzle : MonoBehaviour
     public GameObject hourHandObject;
     public GameObject minuteHandObject;
 
+    public GameObject hourHandObject2;
+    public GameObject minuteHandObject2;
+
     public string hourHandItemName = "clock_hour_hand";
     public string minuteHandItemName = "clock_minute_hand";
 
@@ -46,6 +49,8 @@ public class ClockPuzzle : MonoBehaviour
 
     private void OnPuzzleSolved()
     {
+        minuteHandObject2.SetActive(true);
+        hourHandObject2.SetActive(true);
         portal.SetActive(false);
         exitPortal.SetActive(true);
         exitPortal2.SetActive(true);

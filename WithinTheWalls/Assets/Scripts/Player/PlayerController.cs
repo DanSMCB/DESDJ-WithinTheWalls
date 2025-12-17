@@ -130,6 +130,32 @@ public class PlayerController : PortalTraveller
                 clock.Interact();
                 return;
             }
+
+            // ------------------- Puzzle do Espelho --------------------
+            
+            // Luz
+            LightToggle lightToggle = hit.collider.GetComponent<LightToggle>();
+            if (lightToggle != null)
+            {
+                lightToggle.Interact();
+                return;
+            }
+
+            // Objetos
+            Object_Toggle objectToggle = hit.collider.GetComponent<Object_Toggle>();
+            if (objectToggle != null)
+            {
+                objectToggle.Interact();
+                return;
+            }
+
+            // AC
+            ACToggle aCToggle = hit.collider.GetComponent<ACToggle>();
+            if (aCToggle != null)
+            {
+                aCToggle.Interact();
+                return;
+            }
         }
     }
 
