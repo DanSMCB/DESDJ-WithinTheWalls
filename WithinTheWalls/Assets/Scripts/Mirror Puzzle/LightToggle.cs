@@ -1,24 +1,35 @@
 using UnityEngine;
+using Alteruna;
 
-public class LightToggle : MonoBehaviour, IMirrorState
+public class LightToggle : AttributesSync, IMirrorState
 {
     public string objectID;
     public GameObject light;
-    private bool isOn;
-
+    [SynchronizableField]
+    public bool isOn;
+    private bool lastUpdate;
     public string ObjectID => objectID;
 
     void Start()
     {
-        isOn = light.gameObject.activeSelf;
+        isOn = light.activeSelf;
+        lastUpdate = isOn;
     }
 
     public void Interact()
     {
         isOn = !isOn;
-        light.SetActive(isOn);
 
         MirrorRoomManager.Instance.CheckRooms();
+    }
+
+    public void Update()
+    {
+        if(isOn!=lastUpdate)
+        {
+            light.SetActive(isOn);
+            lastUpdate = isOn;
+        }
     }
 
     public int GetState()

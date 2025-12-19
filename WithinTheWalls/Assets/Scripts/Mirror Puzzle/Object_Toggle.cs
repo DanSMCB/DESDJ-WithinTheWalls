@@ -1,11 +1,14 @@
 using UnityEngine;
+using Alteruna;
 
-public class Object_Toggle : MonoBehaviour, IMirrorState
+public class Object_Toggle : AttributesSync, IMirrorState
 {
     public string objectID;
     public GameObject[] states;
     private int currentIndex;
 
+    [SynchronizableField]
+    private int syncedIndex;
     public string ObjectID => objectID;
 
     void Start()
@@ -15,6 +18,7 @@ public class Object_Toggle : MonoBehaviour, IMirrorState
             if (states[i].activeSelf)
             {
                 currentIndex = i;
+                syncedIndex = i;
                 break;
             }
         }
@@ -22,12 +26,19 @@ public class Object_Toggle : MonoBehaviour, IMirrorState
 
     public void Interact()
     {
-        currentIndex = (currentIndex + 1) % states.Length;
-
-        for (int i = 0; i < states.Length; i++)
-            states[i].SetActive(i == currentIndex);
+        syncedIndex=(currentIndex + 1) % states.Length;
 
         MirrorRoomManager.Instance.CheckRooms();
+    }
+
+    public void Update()
+    {
+        if (syncedIndex != currentIndex)
+        {
+            currentIndex = syncedIndex;
+            for (int i = 0; i < states.Length; i++)
+                states[i].SetActive(i == currentIndex);
+        }
     }
 
     public int GetState()
