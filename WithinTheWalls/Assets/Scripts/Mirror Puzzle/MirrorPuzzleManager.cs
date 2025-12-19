@@ -14,6 +14,9 @@ public class MirrorRoomManager : AttributesSync
 
     [SynchronizableField]
     public bool puzzleSolved;
+    public bool captionBool=false;
+
+    public Captions captions;
 
     void Awake()
     {
@@ -37,6 +40,12 @@ public class MirrorRoomManager : AttributesSync
 
     public void CheckRooms()
     {
+        if(captionBool==false)
+        {
+            captions.ShowCaption("Both rooms seem to be connected in some way...");
+            captionBool=true;
+        }
+
         foreach (var key in roomADict.Keys)
         {
             Debug.Log("Mirror " + key + ": A=" + roomADict[key].GetState() + " | B=" + roomBDict[key].GetState());
