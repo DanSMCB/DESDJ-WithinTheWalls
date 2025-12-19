@@ -4,12 +4,19 @@ using UnityEngine.UI;
 using Alteruna;
 using Alteruna.Trinity;
 using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Alteruna
 {
     public class MultiplayerMenu : CommunicationBridge
     {
+        [Header("Scene Settings")]
+        public string nextSceneName = "Outside House";
+        public float delayBeforeLoad = 10f;
+
+        private bool countdownStarted = false;
+
         [SerializeField] private TMP_Text TitleText;
         [SerializeField] private GameObject LANEntryPrefab;
         [SerializeField] private GameObject WANEntryPrefab;
@@ -51,6 +58,35 @@ namespace Alteruna
             if (Multiplayer.IsConnected)
             {
                 Connected(Multiplayer, null);
+            }
+        }
+
+        void Update()
+        {
+            if (countdownStarted)
+                return;
+
+            if (Multiplayer.Instance.GetUsers().Count == 2)
+            {
+                countdownStarted = true;
+                StartCoroutine(LoadNextSceneAfterDelay());
+            }
+        }
+
+        private IEnumerator LoadNextSceneAfterDelay()
+        {
+            Debug.Log("Ambos os jogadores presentes. A mudar de cena em " + delayBeforeLoad + " segundos...");
+
+            yield return new WaitForSeconds(delayBeforeLoad);
+
+            if (Multiplayer.Instance.GetUsers().Count >= 2)
+            {
+                Multiplayer.LoadScene(nextSceneName);
+            }
+            else
+            {
+                countdownStarted = false;
+                Debug.Log("Jogador saiu, cancelada mudança de cena.");
             }
         }
 

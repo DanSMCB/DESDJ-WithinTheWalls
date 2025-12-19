@@ -46,7 +46,6 @@ public class Door : AttributesSync
         ToggleDoor();
     }
 
-    [SynchronizableMethod]
     public void ToggleDoor()
     {
         isOpen = !isOpen;

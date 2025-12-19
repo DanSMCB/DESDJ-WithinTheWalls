@@ -18,8 +18,6 @@ public class BoilerRoomManager : AttributesSync
     private ParticleSystem steam;
     private float fadeOutDuration = 3f;
 
-    private bool puzzleSolved = false;
-
     private HashSet<User> playersInBasement = new();
     private bool lastAnyValveOpen;
 

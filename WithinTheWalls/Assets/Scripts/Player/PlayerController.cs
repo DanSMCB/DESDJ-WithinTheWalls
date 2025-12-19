@@ -58,7 +58,10 @@ public class PlayerController : PortalTraveller
         if (!_avatar.IsMe)
         {
             if (cam != null)
+            {
                 cam.enabled = false;
+                cam.GetComponent<AudioListener>().enabled = false;
+            }
 
             return;
         }
@@ -125,11 +128,12 @@ public class PlayerController : PortalTraveller
             Item item = hit.collider.GetComponent<Item>();
             if (item != null)
             {
-                Debug.Log("Picked up " + item.itemName);
-                InventoryManager inv = GameObject.Find("InventoryCanvas").GetComponent<InventoryManager>();
+                InventoryManager inv = GameObject.Find("InventoryCanvas")
+                    .GetComponent<InventoryManager>();
+
                 inv.AddItem(item.itemName, item.quantity, item.sprite);
 
-                Destroy(item.gameObject);
+                item.RequestPickup();
                 return;
             }
 
@@ -147,6 +151,14 @@ public class PlayerController : PortalTraveller
             if (valve != null && !BoilerRoomManager.Instance.LocalPlayerIsAffected())
             {
                 valve.InteractValve();
+                return;
+            }
+
+            // ------------------- Puzzle da Galeria --------------------
+            KeypadController keypad = hit.collider.GetComponentInParent<KeypadController>();
+            if (keypad != null)
+            {
+                keypad.Interact(this);
                 return;
             }
 
