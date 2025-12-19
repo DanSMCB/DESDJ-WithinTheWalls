@@ -1,12 +1,15 @@
 using UnityEngine;
+using Alteruna;
 
-public class ACToggle : MonoBehaviour, IMirrorState
+public class ACToggle : AttributesSync, IMirrorState
 {
     public string objectID;
     public GameObject ac_off;
     public GameObject ac_on;
     public AudioSource audioSource;
-    private bool isOn;
+    [SynchronizableField]
+    public bool isOn;
+    private bool lastUpdate;
     public string ObjectID => objectID;
 
     void Start()
@@ -21,21 +24,36 @@ public class ACToggle : MonoBehaviour, IMirrorState
             isOn = false;
             audioSource.Stop();
         }
+        lastUpdate = isOn;
     }
 
     public void Interact()
     {
         isOn = !isOn;
 
-        ac_on.SetActive(isOn);
-        ac_off.SetActive(!isOn);
-
-        if (isOn)
-            audioSource.Play();
-        else
-            audioSource.Stop();
-
         MirrorRoomManager.Instance.CheckRooms();
+    }
+
+    public void Update()
+    {
+        if(isOn!=lastUpdate)
+        {
+            if (isOn)
+            {
+                if (!audioSource.isPlaying)
+                    audioSource.Play();
+                ac_on.SetActive(true);
+                ac_off.SetActive(false);
+            }
+            else
+            {
+                if (audioSource.isPlaying)
+                    audioSource.Stop();
+                ac_on.SetActive(false);
+                ac_off.SetActive(true);
+            }
+            lastUpdate = isOn;
+        }
     }
 
     public int GetState()
