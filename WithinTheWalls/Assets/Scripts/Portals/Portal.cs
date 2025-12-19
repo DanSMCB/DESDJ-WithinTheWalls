@@ -71,9 +71,20 @@ public class Portal : MonoBehaviour {
     }
 
     // Called before any portal cameras are rendered for the current frame
-    public void PrePortalRender () {
-        foreach (var traveller in trackedTravellers) {
-            UpdateSliceParams (traveller);
+    public void PrePortalRender()
+    {
+        if (playerCam == null)
+            return;
+
+        for (int i = trackedTravellers.Count - 1; i >= 0; i--)
+        {
+            if (trackedTravellers[i] == null)
+            {
+                trackedTravellers.RemoveAt(i);
+                continue;
+            }
+
+            UpdateSliceParams(trackedTravellers[i]);
         }
     }
 

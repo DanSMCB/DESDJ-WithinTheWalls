@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 6330137071876468684}
   - component: {fileID: 9153910372173480574}
   - component: {fileID: 1720778319993426846}
-  - component: {fileID: 672942072076010107}
+  - component: {fileID: 2709256993421198419}
   m_Layer: 0
   m_Name: Player
   m_TagString: Avatar
@@ -277,14 +277,27 @@ MonoBehaviour:
   onSFX: {fileID: 8300000, guid: 67599690d5a57424492cac50fd4d675a, type: 3}
   offSFX: {fileID: 8300000, guid: 81ec0f1cbe84edb46ab05e3fdefc8220, type: 3}
   IsEnabled: 1
---- !u!81 &672942072076010107
-AudioListener:
+--- !u!65 &2709256993421198419
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2737713651744553735}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.6, y: 1, z: 0.6}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7091131377647696196
 GameObject:
   m_ObjectHideFlags: 0
@@ -313,7 +326,7 @@ Transform:
   m_GameObject: {fileID: 7091131377647696196}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.454, z: 0}
+  m_LocalPosition: {x: 0, y: 0.536, z: 0.092}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -698,7 +711,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 23c27507ffe066c44ad2ff71e567c3d3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.875
+      value: -0.901
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 23c27507ffe066c44ad2ff71e567c3d3, type: 3}
       propertyPath: m_LocalPosition.z

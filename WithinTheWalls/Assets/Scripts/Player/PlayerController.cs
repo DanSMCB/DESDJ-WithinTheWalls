@@ -37,24 +37,34 @@ public class PlayerController : PortalTraveller
 
     public float interactDistance = 4f;
 
-    //[HideInInspector]
+    [HideInInspector]
     public bool canLook = true;
 
     private PlayerInputActions playerInputActions;
+    private PlayerInput playerInput;
 
     private Alteruna.Avatar _avatar;
 
     void Awake()
     {
-        playerInputActions = new PlayerInputActions();
+        _avatar = GetComponent<Alteruna.Avatar>();
+        playerInput = GetComponent<PlayerInput>();
+        playerInput.enabled = false;
     }
 
     void Start()
     {
-        playerInputActions = new PlayerInputActions();
-        _avatar = GetComponent<Alteruna.Avatar>();
+        cam = GetComponentInChildren<Camera>();
         if (!_avatar.IsMe)
+        {
+            if (cam != null)
+                cam.enabled = false;
+
             return;
+        }
+
+        playerInput.enabled = true;
+        playerInputActions = new PlayerInputActions();
 
         controller = GetComponent<CharacterController>();
 
@@ -131,8 +141,16 @@ public class PlayerController : PortalTraveller
                 return;
             }
 
+            // ------------------- Puzzle da Cave --------------------
+            // Interagir com válvula do boiler
+            BoilerValveController valve = hit.collider.GetComponent<BoilerValveController>();
+            if (valve != null && !BoilerRoomManager.Instance.LocalPlayerIsAffected())
+            {
+                valve.InteractValve();
+                return;
+            }
+
             // ------------------- Puzzle do Espelho --------------------
-            
             // Luz
             LightToggle lightToggle = hit.collider.GetComponent<LightToggle>();
             if (lightToggle != null)
@@ -179,6 +197,12 @@ public class PlayerController : PortalTraveller
     {
         if (!_avatar.IsMe)
             return;
+
+        if (PortalManager.Instance != null && PortalManager.Instance.LocalPlayerCamera != cam)
+        {
+            PortalManager.Instance.RegisterLocalCamera(cam);
+            Debug.Log($"PortalManager: Registered local player camera = {cam?.name}");
+        }
 
         if (!canLook) 
             return;

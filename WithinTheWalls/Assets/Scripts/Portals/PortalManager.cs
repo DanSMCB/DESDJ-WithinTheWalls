@@ -18,7 +18,6 @@ public class PortalManager : MonoBehaviour
     public void RegisterLocalCamera(Camera cam)
     {
         LocalPlayerCamera = cam;
-        Debug.Log($"PortalManager: Registered local player camera = {cam?.name}");
     }
 
     void LateUpdate()
